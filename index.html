@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Library</title>
+    <link href='stylesheet.css' rel='stylesheet'>
+    <meta charset="UTF-8"/>
+</head>
+<body>
+    <h1>Library</h1>
+    <button id="new-book">Add New Book</button><br>
+    <div class="form-popup" id="myForm">
+        <form action="/action_page.php" class="form-container">
+            <h1>New Book</h1>
+      
+            <input type="text" placeholder="Title" name="title" required>
+      
+            <input type="text" placeholder="Author" name="author" required>
+
+            <input type="text" placeholder="Number of Pages" name="pages" required>
+            
+            <button type="submit" class="btn">Submit</button>
+            <button type="submit" class="btn cancel" onclick="closeForm()">Cancel</button>
+        </form>
+    </div> 
+    <div id="book-container"></div>
+    <script type="text/javascript" src="script.js"></script>
+</body>    
+</html>
