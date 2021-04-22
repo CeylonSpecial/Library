@@ -1,7 +1,20 @@
 let myLibrary = [];
 const newBook = document.querySelector('#new-book');
+const submit = document.querySelector('#submit');
+const cancel = document.querySelector('#cancel');
 
+displayBooks();
 newBook.addEventListener('click', openForm);
+submit.addEventListener('click', () => {
+    let isVerified = verifyForm();
+    if (isVerified) {
+        addBookToLibrary();
+        clearInput();
+        closeForm();
+    }
+});
+cancel.addEventListener('click', closeForm);
+
 
 function Book(title, author, pages, have_read) {
     this.title = title
@@ -14,10 +27,10 @@ function Book(title, author, pages, have_read) {
 }
 
 function addBookToLibrary() {
-    let title = prompt("Title");
-    let author = prompt("Author");
-    let pages = prompt("Number of pages");
-    let read = prompt("Read or not?");
+    let title = document.querySelector('#title').value;
+    let author = document.querySelector('#author').value;
+    let pages = document.querySelector('#pages').value;
+    let read = "placeholder";
 
     const book = new Book(title, author, pages, read);
     myLibrary.push(book);
@@ -33,10 +46,23 @@ function displayBooks() {
         library.appendChild(newBook);
     })
 }
+
 function openForm() {
     document.getElementById("myForm").style.display = "block";
 }
   
 function closeForm() {
     document.getElementById("myForm").style.display = "none";
-} 
+}
+
+function verifyForm() {
+    let input = [...document.querySelectorAll('.input')];
+
+    return input.every(entry => entry.validity.valid);
+}
+
+function clearInput() {
+    let input = [...document.querySelectorAll('.input')];
+
+    input.forEach(entry => entry.value = '');
+}
