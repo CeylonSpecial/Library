@@ -8,7 +8,17 @@ body {
 
 #book-container {
     display: grid;
-    margin: auto;
+    grid-template-columns: repeat(5, 1fr);
+}
+
+.title-author {
+    background: plum;
+    width: 130px;
+    height: 150px;
+}
+
+.book {
+    text-align: center;
 }
 
 .form-popup {
@@ -52,11 +62,9 @@ body {
 }
 
 input[type='checkbox'] {
-    float: center;
     width: 10px;
 }
 input[type='checkbox'] + label {
-    display: block;
     width: 10px;
 }
 

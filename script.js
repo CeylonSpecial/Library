@@ -11,18 +11,22 @@ submit.addEventListener('click', () => {
         addBookToLibrary();
         clearInput();
         closeForm();
+        displayBooks();
     }
-});
-cancel.addEventListener('click', closeForm);
+})
 
+cancel.addEventListener('click', () => {
+    clearInput();
+    closeForm();
+})
 
-function Book(title, author, pages, have_read) {
+function Book(title, author, pages, read) {
     this.title = title
     this.author = author
     this.pages = pages
-    this.have_read = have_read
+    this.read = read
     this.info = function() {
-        return `${this.title} by ${this.author}, ${this.pages} pages, ${this.have_read}`
+        return `${this.title} by ${this.author}, ${this.pages} pages`
     }
 }
 
@@ -30,7 +34,7 @@ function addBookToLibrary() {
     let title = document.querySelector('#title').value;
     let author = document.querySelector('#author').value;
     let pages = document.querySelector('#pages').value;
-    let read = "placeholder";
+    let read = document.querySelector('#read-check').checked;
 
     const book = new Book(title, author, pages, read);
     myLibrary.push(book);
@@ -39,11 +43,30 @@ function addBookToLibrary() {
 function displayBooks() {
     const library = document.querySelector("#book-container");
 
+    removeAllChildNodes(library);
+
     myLibrary.forEach(function(book) {
         const newBook = document.createElement('div');
-        newBook.textContent = book.info();
+        const titleAndAuthor = document.createElement('div');
+        const bookInfo = document.createElement('div');
+        let read = document.createElement('input');
+        read.type = 'checkbox';
+        read.id = 'read-check';
+        const label = document.createElement('label');
+        label.htmlFor = 'read-check';
+        label.appendChild(document.createTextNode('Read?'));
+        if (book.read) {
+            read.checked = true;
+        }
+        titleAndAuthor.textContent = book.info();
         newBook.classList.add('book');
+        titleAndAuthor.classList.add('title-author');
+        bookInfo.classList.add('book-info');
         library.appendChild(newBook);
+        newBook.appendChild(titleAndAuthor);
+        newBook.appendChild(bookInfo);
+        bookInfo.appendChild(label);
+        bookInfo.appendChild(read);
     })
 }
 
@@ -65,4 +88,10 @@ function clearInput() {
     let input = [...document.querySelectorAll('.input')];
 
     input.forEach(entry => entry.value = '');
+}
+
+function removeAllChildNodes(parent) {
+    while (parent.firstChild) {
+        parent.removeChild(parent.firstChild);
+    }
 }
