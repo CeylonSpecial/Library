@@ -2,9 +2,25 @@ let myLibrary = [];
 const newBook = document.querySelector('#new-book');
 const submit = document.querySelector('#submit');
 const cancel = document.querySelector('#cancel');
+const readButton = document.querySelector('#read');
+const deleteButton = document.querySelector('#delete');
 
 displayBooks();
+
 newBook.addEventListener('click', openForm);
+
+if (readButton) {
+    readButton.addEventListener('click', () => {
+        console.log('hello!');
+    })
+}
+
+if (deleteButton) {
+    deleteButton.addEventListener('click', () => {
+        console.log('ayyyy!');
+    })
+}
+
 submit.addEventListener('click', () => {
     let isVerified = verifyForm();
     if (isVerified) {
@@ -25,9 +41,9 @@ function Book(title, author, pages, read) {
     this.author = author
     this.pages = pages
     this.read = read
-    this.info = function() {
-        return `${this.title} by ${this.author}, ${this.pages} pages`
-    }
+    //this.info = function() {
+        //return `${this.title} by ${this.author}, ${this.pages} pages`
+    //}
 }
 
 function addBookToLibrary() {
@@ -35,6 +51,12 @@ function addBookToLibrary() {
     let author = document.querySelector('#author').value;
     let pages = document.querySelector('#pages').value;
     let read = document.querySelector('#read-check').checked;
+    
+    if (read) {
+        read = "Read";
+    } else {
+        read = "Unread";
+    }
 
     const book = new Book(title, author, pages, read);
     myLibrary.push(book);
@@ -46,28 +68,47 @@ function displayBooks() {
     removeAllChildNodes(library);
 
     myLibrary.forEach(function(book) {
-        const newBook = document.createElement('div');
-        const titleAndAuthor = document.createElement('div');
-        const bookInfo = document.createElement('div');
-        let read = document.createElement('input');
-        read.type = 'checkbox';
-        read.id = 'read-check';
-        const label = document.createElement('label');
-        label.htmlFor = 'read-check';
-        label.appendChild(document.createTextNode('Read?'));
-        if (book.read) {
-            read.checked = true;
+        const [newBook, bookInfo] = createDivs(library);
+        let readButton = createButtons(bookInfo, book);
+        
+        for (const value of Object.values(book)) {
+            if (value === 'Read' || value === 'Unread') {
+                readButton.textContent = value;
+            } else {
+                newBook.textContent += value + "\r\n\r\n";
+            }
         }
-        titleAndAuthor.textContent = book.info();
-        newBook.classList.add('book');
-        titleAndAuthor.classList.add('title-author');
-        bookInfo.classList.add('book-info');
-        library.appendChild(newBook);
-        newBook.appendChild(titleAndAuthor);
-        newBook.appendChild(bookInfo);
-        bookInfo.appendChild(label);
-        bookInfo.appendChild(read);
     })
+}
+
+function createDivs(parent) {
+    const newBook = document.createElement('div');
+    const bookInfo = document.createElement('div');
+
+    bookInfo.classList.add('book-info');
+    newBook.classList.add('book');
+    parent.appendChild(bookInfo);
+    bookInfo.appendChild(newBook);
+
+    return [newBook, bookInfo];
+}
+
+function createButtons(parent, book) {
+    const buttons = document.createElement('div');
+    const deleteButton = document.createElement('button');
+    let readButton = document.createElement('button');
+
+    deleteButton.id = book;
+    deleteButton.classList.add('delete');
+    deleteButton.textContent = 'Delete';
+    readButton.id = book;
+    readButton.classList.add('read');
+    buttons.classList.add('book-buttons');
+    parent.appendChild(buttons)
+    buttons.appendChild(readButton);
+    buttons.appendChild(deleteButton);
+
+    return readButton;
 }
 
 function openForm() {

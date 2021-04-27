@@ -9,15 +9,33 @@ body {
 #book-container {
     display: grid;
     grid-template-columns: repeat(5, 1fr);
-}
-
-.title-author {
-    background: plum;
-    width: 130px;
-    height: 150px;
+    justify-items: center;
 }
 
 .book {
+    text-align: center;
+    white-space: pre-wrap;
+    background: cornflowerblue;
+    height: 230px;
+    width: 200px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+.book-buttons {
+    justify-content: center;
+    width: 200px;
+    display: flex;
+    flex-direction: row;
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+.book-info {
+    width: 200px;
     text-align: center;
 }
 
