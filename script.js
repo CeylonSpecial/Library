@@ -144,21 +144,3 @@ function removeAllChildNodes(parent) {
         parent.removeChild(parent.firstChild);
     }
 }
-
-const firebaseConfig = {
-    apiKey: "AIzaSyAzZ7ypOOw3gJgtLbamzlCCUM304WB2jc8",
-    authDomain: "library-11bea.firebaseapp.com",
-    projectId: "library-11bea",
-    storageBucket: "library-11bea.appspot.com",
-    messagingSenderId: "365258081852",
-    appId: "1:365258081852:web:15d44c883bbb2d38612539"
-  };
-firebase.initializeApp(firebaseConfig);
-
-const database = firebase.database().ref();
-
-function writeLibraryData(myLibrary) {
-    firebase.database().ref('library').set({
-        library: myLibrary
-    });
-}
