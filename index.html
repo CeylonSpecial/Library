@@ -2,30 +2,38 @@
 <html>
 <head>
     <title>Library</title>
+    <script src="https://www.gstatic.com/firebasejs/8.5.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.5.0/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.5.0/firebase-database.js"></script>
     <link href='stylesheet.css' rel='stylesheet'>
     <meta charset="UTF-8"/>
 </head>
 <body>
-    <h1>Library</h1>
-    <button id="new-book">Add New Book</button><br>
-    <div class="form-popup" id="myForm">
-        <div class="form-container">
-            <h1>New Book</h1>
-      
-            <input type="text" placeholder="Title" name="title" id="title" class="input" required>
-      
-            <input type="text" placeholder="Author" name="author" id="author" class="input" required>
+    <div class="header-container">
+        <h1>L I B R A R Y</h1>
+        <p>_____________________________</p>
+        <button class="new-bookbtn">Add New Book</button>
+    </div>
+    <div class="popup-container">
+        <div class="form-popup" id="myForm">
+            <div class="form-container">
+                <h1>New Book</h1>
+        
+                <input type="text" placeholder="Title" name="title" id="title" class="input" required>
+        
+                <input type="text" placeholder="Author" name="author" id="author" class="input" required>
 
-            <input type="number" placeholder="Number of Pages" name="pages" id="pages" class="input" min="0" required>
-            
-            <label for="read">Read?</label>
-            <input type="checkbox" name="read" id='read-check'><br>
-            
-            <button type="text" class="btn" id="submit">Submit</button>
-            <button type="text" class="btn cancel" id="cancel">Cancel</button>
-        </div>
-    </div> 
-    <div id="book-container"></div>
+                <input type="number" placeholder="Number of Pages" name="pages" id="pages" class="input" min="0" required><br>
+                
+                <label for="read">Read?</label>
+                <input type="checkbox" name="read" id='read-check'><br>
+                
+                <button type="text" class="btn">Submit</button>
+                <button type="text" class="btn cancel">Cancel</button>
+            </div>
+        </div><br>
+    </div>
+    <div class="library-container"></div>
     <script type="text/javascript" src="script.js"></script>
 </body>    
 </html>

@@ -1,28 +1,67 @@
+.header-container h1 {
+    font-size: 70px;
+    margin-bottom: -20px;
+    color: white;
+    text-shadow: 1px 1px black;
+}
+
+.header-container p {
+    color: white;
+    text-shadow: 1px 1px black;
+    font-weight: bolder;
+}
+
 h1 {
     text-align: center;
+    font-family: 'Times New Roman';
 }
 
 body {
     text-align: center;
+    background-color: #9caf889c; 
 }
 
-#book-container {
+.new-bookbtn {
+    background-color: #794e59;
+    border-style: none;
+    padding: 10px;
+    color: white;
+    margin-top: 10px;
+    border-radius: 3px;
+}
+
+button:hover {
+    cursor: pointer;
+    filter: brightness(90%);
+}
+
+.library-container {
     display: grid;
     grid-template-columns: repeat(5, 1fr);
     justify-items: center;
+    grid-row-gap: 50px;
+    padding-top: 20px;
 }
 
 .book {
-    text-align: center;
-    white-space: pre-wrap;
-    background: cornflowerblue;
-    height: 230px;
+    background: #b38158;
+    height: 240px;
     width: 200px;
     display: flex;
     justify-content: center;
     align-items: center;
-    padding-left: 10px;
-    padding-right: 10px;
+    border-radius: 3px;
+    box-shadow: 3px 1px 3px #424242, inset -1px 1px 2px rgba(255, 255, 255, 0.5);
+}
+
+.book-info {
+    display: inline-block;
+    text-align: center;
+    white-space: pre-wrap;
+    color: white;
+    font-weight: bolder;
+    overflow-wrap: break-word;
+    min-width: 1%;
 }
 
 .book-buttons {
@@ -30,29 +69,52 @@ body {
     width: 200px;
     display: flex;
     flex-direction: row;
-    padding-left: 10px;
-    padding-right: 10px;
+    padding-top: 10px;
 }
 
-.book-info {
+.book-buttons .deletebtn, .book-buttons .readbtn {
+    background-color: #627055;
+    border-style: none;
+    color: white;
+    border-radius: 3px;
+    margin-left: 5px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    height: 30px;
+    width: 70px;
+}
+
+.book-buttons .deletebtn:hover {
+    background-color: #6d0d25;
+}
+
+.book-container {
     width: 200px;
     text-align: center;
+}
+
+.popup-container {
+    position: relative;
+    display: flex;
+    justify-content: center;
 }
 
 .form-popup {
     display: none;
-    text-align: center;
-    margin: auto;
-    width: 300px;
-    border: 3px solid #f1f1f1;
-    background-color: lightblue;
+    width: 400px;
+    background-color: white;
+    z-index: 1;
+    position: absolute;
+    transform: translate(0, 30%);
+    border-radius: 2px;
+    box-shadow: 0px 0px 10px;
 }
 
 .form-container {
-    width: 200px;
+    width: 250px;
     text-align: center;
     margin: auto;
-    background-color: lightblue;
+    background-color: white;
 }
 
 .form-container input {
@@ -60,23 +122,17 @@ body {
     padding-top: 5px;
     padding-bottom: 5px;
     margin: 5px 0 22px 0;
-    border: none;
+    border: 1px solid black;
     background: white;
 }
 
-.form-container input:focus {
-    background-color: #ddd;
-    outline: none;
-}
-
 .form-container .btn {
-    background-color: #4CAF50;
+    background-color: #627055;
     color: white;
     padding: 16px 20px;
     border: none;
-    cursor: pointer;
     margin-bottom:10px;
-    opacity: 0.8;
+    border-radius: 3px;
 }
 
 input[type='checkbox'] {
@@ -87,10 +143,18 @@ input[type='checkbox'] + label {
 }
 
 .form-container .cancel {
-    background-color: red;
+    background-color: #6d0d25;
+    border-radius: 3px;
 }
 
-.form-container .btn:hover, .open-button:hover {
-    opacity: 1;
+.popup-selected {
+    opacity: .5;
+}
+
+.invalid {
+    box-shadow: 0 0 5px red;
+    padding: 3px 0px 3px 3px;
+    margin: 5px 1px 3px 0px;
+    border: 1px solid red;
 }
   

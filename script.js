@@ -1,25 +1,23 @@
 let myLibrary = [];
-const newBook = document.querySelector('#new-book');
-const submit = document.querySelector('#submit');
-const cancel = document.querySelector('#cancel');
-const readButton = document.querySelector('#read');
-const deleteButton = document.querySelector('#delete');
+const newBook = document.querySelector('.new-bookbtn');
+const submit = document.querySelector('.btn');
+const cancel = document.querySelector('.cancel');
 
 displayBooks();
 
+document.addEventListener('click', function(e) {
+    if (e.target) {
+        let index = myLibrary.findIndex(item => item.info() === e.target.getAttribute('data'));
+        if (e.target.textContent === 'Delete') {
+            myLibrary.splice(index, 1);
+        } else if (e.target.textContent === 'Read' || e.target.textContent === 'Unread') {
+            myLibrary[index].read = !myLibrary[index].read
+        }
+        displayBooks();
+    }
+})
+
 newBook.addEventListener('click', openForm);
-
-if (readButton) {
-    readButton.addEventListener('click', () => {
-        console.log('hello!');
-    })
-}
-
-if (deleteButton) {
-    deleteButton.addEventListener('click', () => {
-        console.log('ayyyy!');
-    })
-}
 
 submit.addEventListener('click', () => {
     let isVerified = verifyForm();
@@ -41,9 +39,9 @@ function Book(title, author, pages, read) {
     this.author = author
     this.pages = pages
     this.read = read
-    //this.info = function() {
-        //return `${this.title} by ${this.author}, ${this.pages} pages`
-    //}
+    this.info = function() {
+        return `${this.title}` + "\r\n\r\n" + `${this.author}` + "\r\n\r\n" + `${this.pages}` + " pages"
+    }
 }
 
 function addBookToLibrary() {
@@ -51,32 +49,25 @@ function addBookToLibrary() {
     let author = document.querySelector('#author').value;
     let pages = document.querySelector('#pages').value;
     let read = document.querySelector('#read-check').checked;
-    
-    if (read) {
-        read = "Read";
-    } else {
-        read = "Unread";
-    }
 
     const book = new Book(title, author, pages, read);
     myLibrary.push(book);
 }
 
 function displayBooks() {
-    const library = document.querySelector("#book-container");
+    const library = document.querySelector(".library-container");
 
     removeAllChildNodes(library);
 
     myLibrary.forEach(function(book) {
-        const [newBook, bookInfo] = createDivs(library);
-        let readButton = createButtons(bookInfo, book);
+        const [container, bookInfo] = createDivs(library);
+        let readButton = createButtons(container, book);
         
-        for (const value of Object.values(book)) {
-            if (value === 'Read' || value === 'Unread') {
-                readButton.textContent = value;
-            } else {
-                newBook.textContent += value + "\r\n\r\n";
-            }
+        bookInfo.textContent = book.info();
+        if (book.read) {
+            readButton.textContent = 'Read';
+        } else {
+            readButton.textContent = 'Unread';
         }
     })
 }
@@ -84,13 +75,16 @@ function displayBooks() {
 function createDivs(parent) {
     const newBook = document.createElement('div');
     const bookInfo = document.createElement('div');
+    const container = document.createElement('div');
 
     bookInfo.classList.add('book-info');
     newBook.classList.add('book');
-    parent.appendChild(bookInfo);
-    bookInfo.appendChild(newBook);
+    container.classList.add('book-container');
+    parent.appendChild(container);
+    container.appendChild(newBook)
+    newBook.appendChild(bookInfo);
 
-    return [newBook, bookInfo];
+    return [container, bookInfo];
 }
 
 function createButtons(parent, book) {
@@ -98,11 +92,11 @@ function createButtons(parent, book) {
     const deleteButton = document.createElement('button');
     let readButton = document.createElement('button');
 
-    deleteButton.id = book;
-    deleteButton.classList.add('delete');
+    deleteButton.setAttribute('data', book.info());
+    deleteButton.classList.add('deletebtn');
     deleteButton.textContent = 'Delete';
-    readButton.id = book;
-    readButton.classList.add('read');
+    readButton.setAttribute('data', book.info());
+    readButton.classList.add('readbtn');
     buttons.classList.add('book-buttons');
     parent.appendChild(buttons)
     buttons.appendChild(readButton);
@@ -112,27 +106,59 @@ function createButtons(parent, book) {
 }
 
 function openForm() {
-    document.getElementById("myForm").style.display = "block";
+    document.querySelector('.form-popup').style.display = "block";
+    document.querySelector('.library-container').classList.add('popup-selected');
+    document.querySelector('.header-container').classList.add('popup-selected');
 }
   
 function closeForm() {
-    document.getElementById("myForm").style.display = "none";
+    document.querySelector('.form-popup').style.display = "none";
+    document.querySelector('.library-container').classList.remove('popup-selected');
+    document.querySelector('.header-container').classList.remove('popup-selected');
 }
 
 function verifyForm() {
     let input = [...document.querySelectorAll('.input')];
 
+    input.forEach(function(entry) {
+        if (!entry.validity.valid) {
+            entry.classList.add('invalid');
+        }
+    })
     return input.every(entry => entry.validity.valid);
 }
 
 function clearInput() {
     let input = [...document.querySelectorAll('.input')];
+    let readCheck = document.querySelector('#read-check');
 
-    input.forEach(entry => entry.value = '');
+    input.forEach(function(entry) {
+        entry.value = '';
+        entry.classList.remove('invalid');
+    })
+    readCheck.checked = false;
 }
 
 function removeAllChildNodes(parent) {
     while (parent.firstChild) {
         parent.removeChild(parent.firstChild);
     }
+}
+
+const firebaseConfig = {
+    apiKey: "AIzaSyAzZ7ypOOw3gJgtLbamzlCCUM304WB2jc8",
+    authDomain: "library-11bea.firebaseapp.com",
+    projectId: "library-11bea",
+    storageBucket: "library-11bea.appspot.com",
+    messagingSenderId: "365258081852",
+    appId: "1:365258081852:web:15d44c883bbb2d38612539"
+  };
+firebase.initializeApp(firebaseConfig);
+
+const database = firebase.database().ref();
+
+function writeLibraryData(myLibrary) {
+    firebase.database().ref('library').set({
+        library: myLibrary
+    });
 }
