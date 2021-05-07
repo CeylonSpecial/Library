@@ -1,3 +1,13 @@
+var firebaseConfig = {
+    apiKey: "AIzaSyAtMOqz2WlMwKbS6pBsAxC6mgHjJ4XhnTQ",
+    authDomain: "library-e88b2.firebaseapp.com",
+    projectId: "library-e88b2",
+    storageBucket: "library-e88b2.appspot.com",
+    messagingSenderId: "794752704538",
+    appId: "1:794752704538:web:e97d98c2e0c5a5b864f1a3"
+};
+firebase.initializeApp(firebaseConfig);
+
 let myLibrary = [];
 const newBook = document.querySelector('.new-bookbtn');
 const submit = document.querySelector('.btn');
@@ -9,9 +19,11 @@ document.addEventListener('click', function(e) {
     if (e.target) {
         let index = myLibrary.findIndex(item => item.info() === e.target.getAttribute('data'));
         if (e.target.textContent === 'Delete') {
+            deleteFromDB(myLibrary[index]);
             myLibrary.splice(index, 1);
         } else if (e.target.textContent === 'Read' || e.target.textContent === 'Unread') {
             myLibrary[index].read = !myLibrary[index].read
+            editInDB(myLibrary[index]);
         }
         displayBooks();
     }
@@ -22,7 +34,7 @@ newBook.addEventListener('click', openForm);
 submit.addEventListener('click', () => {
     let isVerified = verifyForm();
     if (isVerified) {
-        addBookToLibrary();
+        addToDB(addBookToLibrary());
         clearInput();
         closeForm();
         displayBooks();
@@ -33,6 +45,52 @@ cancel.addEventListener('click', () => {
     clearInput();
     closeForm();
 })
+
+function addToDB(book) {
+
+    const db = firebase.firestore();
+
+    db.collection("library").doc(`${book.info()}`).set({
+        title: book.title,
+        author: book.author,
+        pages: book.pages,
+        read: book.read
+    })
+    .then(() => {
+        console.log("Document successfully written!");
+    })
+    .catch((error) => {
+        console.error("Error adding document: ", error);
+    });
+}
+
+function deleteFromDB(book) {
+    const db = firebase.firestore();
+    
+    db.collection("library").doc(`${book.info()}`).delete().then(() => {
+        console.log("Document successfully deleted!");
+    }).catch((error) => {
+        console.error("Error removing document: ", error);
+    });
+}
+
+function editInDB(book) {
+    const db = firebase.firestore();
+
+    db.collection('library').doc(`${book.info()}`).update({
+        read: book.read
+    })
+}
+
+function readDB() {
+    const db = firebase.firestore();
+
+    db.collection("library").get().then((querySnapshot) => {
+        querySnapshot.forEach((doc) => {
+            console.log(doc.id, " => ", doc.data());
+        });
+    });
+}
 
 function Book(title, author, pages, read) {
     this.title = title
@@ -52,6 +110,7 @@ function addBookToLibrary() {
 
     const book = new Book(title, author, pages, read);
     myLibrary.push(book);
+    return book;
 }
 
 function displayBooks() {
@@ -144,3 +203,4 @@ function removeAllChildNodes(parent) {
         parent.removeChild(parent.firstChild);
     }
 }
+  
