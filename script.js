@@ -24,11 +24,8 @@ let myLibrary = [];
 const newBook = document.querySelector('.new-bookbtn');
 const submit = document.querySelector('.btn');
 const cancel = document.querySelector('.cancel');
-const library = document.querySelector(".library-container");
 
-window.addEventListener('load', function () {
-    readDB();
-});
+readDB();
 
 document.addEventListener('click', function(e) {
     if (e.target.className === 'deletebtn' || e.target.className === 'readbtn') {
@@ -39,9 +36,9 @@ document.addEventListener('click', function(e) {
         } else if (e.target.textContent === 'Read' || e.target.textContent === 'Unread') {
             myLibrary[index].read = !myLibrary[index].read
             editInDB(myLibrary[index]);
-        }
-        displayBooksLoop();
-    }
+        };
+        displayBooks();
+    };
 })
 
 newBook.addEventListener('click', openForm);
@@ -52,8 +49,8 @@ submit.addEventListener('click', () => {
         addToDB(addBookToLibrary());
         clearInput();
         closeForm();
-        displayBooksLoop();
-    }
+        displayBooks();
+    };
 })
 
 cancel.addEventListener('click', () => {
@@ -94,20 +91,18 @@ function editInDB(book) {
 
     db.collection('library').doc(`${book.info()}`).update({
         read: book.read
-    })
+    });
 }
 
-function readDB() {
+async function readDB() {
     const db = firebase.firestore();
 
-    db.collection("library").get().then((querySnapshot) => {
-            querySnapshot.forEach((doc) => {
-            const data = doc.data();
-            const book = new Book(data.title, data.author, data.pages, data.read);
-            myLibrary.push(book);
-            displayBooks(book);
-        });
-    })
+    const data = await db.collection("library").get();
+    data.docs.forEach(doc => {
+        let book = new Book(doc.data().title, doc.data().author, doc.data().pages, doc.data().read);
+        myLibrary.push(book);
+    });
+    displayBooks();
 }
 
 function addBookToLibrary() {
@@ -121,22 +116,20 @@ function addBookToLibrary() {
     return book;
 }
 
-function displayBooks(book) {
-    const [container, bookInfo] = createDivs(library);
-    let readButton = createButtons(container, book);
-        
-    bookInfo.textContent = book.info();
-    if (book.read) {
-        readButton.textContent = 'Read';
-    } else {
-        readButton.textContent = 'Unread';
-    }
-}
-
-function displayBooksLoop() {
+function displayBooks() {
+    const library = document.querySelector(".library-container");
     removeAllChildNodes(library);
+    
     myLibrary.forEach(book => {
-        displayBooks(book);
+        const [container, bookInfo] = createDivs(library);
+        let readButton = createButtons(container, book);
+
+        bookInfo.textContent = book.info();
+        if (book.read) {
+            readButton.textContent = 'Read';
+        } else {
+            readButton.textContent = 'Unread';
+        };
     });
 }
 
@@ -149,7 +142,7 @@ function createDivs(parent) {
     newBook.classList.add('book');
     container.classList.add('book-container');
     parent.appendChild(container);
-    container.appendChild(newBook)
+    container.appendChild(newBook);
     newBook.appendChild(bookInfo);
 
     return [container, bookInfo];
@@ -166,7 +159,7 @@ function createButtons(parent, book) {
     readButton.setAttribute('data', book.info());
     readButton.classList.add('readbtn');
     buttons.classList.add('book-buttons');
-    parent.appendChild(buttons)
+    parent.appendChild(buttons);
     buttons.appendChild(readButton);
     buttons.appendChild(deleteButton);
 
@@ -191,8 +184,8 @@ function verifyForm() {
     input.forEach(function(entry) {
         if (!entry.validity.valid) {
             entry.classList.add('invalid');
-        }
-    })
+        };
+    });
     return input.every(entry => entry.validity.valid);
 }
 
@@ -203,12 +196,12 @@ function clearInput() {
     input.forEach(function(entry) {
         entry.value = '';
         entry.classList.remove('invalid');
-    })
+    });
     readCheck.checked = false;
 }
 
 function removeAllChildNodes(parent) {
     while (parent.firstChild) {
         parent.removeChild(parent.firstChild);
-    }
+    };
 }
