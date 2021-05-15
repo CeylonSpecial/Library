@@ -11,7 +11,7 @@ class Book {
 }
 
 let myLibrary = [];
-const mainBtns = document.querySelectorAll('.main-btn');
+const newBookBtn = document.querySelector('.new-bookbtn');
 const submitBook = document.querySelector('.submit-book');
 const cancel = document.querySelectorAll('.cancel');
 
@@ -34,10 +34,8 @@ document.addEventListener('click', (e) => {
     };
 })
 
-mainBtns.forEach(button => {
-    button.addEventListener('click', (e) => {
-        openForm(e.target.getAttribute('data'));
-    });
+newBookBtn.addEventListener('click', (e) => {
+    openForm(e.target.getAttribute('data'));
 })
 
 submitBook.addEventListener('click', (e) => {
@@ -49,7 +47,7 @@ submitBook.addEventListener('click', (e) => {
         let read = document.querySelector('#read-check').checked;
         
         addToDB(addBookToLibrary(title, author, pages, read));
-        clearInput();
+        resetForm(submitBook.parentElement);
         closeForm(e.target.getAttribute('data'));
         displayBooks();
     };
@@ -57,7 +55,7 @@ submitBook.addEventListener('click', (e) => {
 
 cancel.forEach(button => {
     button.addEventListener('click', (e) => {
-        clearInput();
+        resetForm(button.parentElement);
         closeForm(e.target.getAttribute('data'));
     })
 })
@@ -197,15 +195,8 @@ function verifyForm() {
     return input.every(entry => entry.validity.valid);
 }
 
-function clearInput() {
-    let input = [...document.querySelectorAll('.input')];
-    let readCheck = document.querySelector('#read-check');
-
-    input.forEach(function(entry) {
-        entry.value = '';
-        entry.classList.remove('invalid');
-    });
-    readCheck.checked = false;
+function resetForm(form) {
+    form.reset();
 }
 
 function removeAllChildNodes(parent) {

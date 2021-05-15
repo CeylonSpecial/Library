@@ -2,21 +2,21 @@
 <html>
 <head>
     <title>Library</title>
-    <link href='stylesheet2.css' rel='stylesheet'>
+    <link href='stylesheet.css' rel='stylesheet'>
     <meta charset="UTF-8"/>
 </head>
 <body>
     <div class="nav">
-        <button type="text" class="main-btn signin-btn" data="signin-popup">Sign In</button>
-        <button type="text" class="main-btn signup-btn" data="signup-popup">Sign Up</button>
+        <button type="text" class="login signin-btn" data="signin-popup">Login</button>
+        <button type="text" class="login signup-btn" data="signup-popup">Sign Up</button>
     </div>
     <div class="popup-container">
         <div class="signin-popup">
             <form class="signin-container">
-                <h1>Sign In</h1>
+                <h1>Login</h1>
                 <input type="text" placeholder="Email" name="email" class="input" required>
                 <input type="password" placeholder="Password" name="password" class="input" required>
-                <button type="submit" id="sign-in" class="submit" data="signin-popup">Sign In</button>
+                <button type="submit" id="login" class="submit" data="signin-popup">Login</button>
                 <button type="text" class="cancel" data="signin-popup">Cancel</button>
             </form>
         </div>
@@ -33,11 +33,11 @@
     <div class="header-container">
         <h1>L I B R A R Y</h1>
         <p>_____________________________</p>
-        <button type="text" class="main-btn new-bookbtn" data="form-popup">Add New Book</button>
+        <button type="text" class="new-bookbtn" data="form-popup">Add New Book</button>
     </div>
     <div class="popup-container">
         <div class="form-popup">
-            <div class="form-container">
+            <form class="form-container">
                 <h1>New Book</h1>
                 <input type="text" placeholder="Title" name="title" id="title" class="book-input input" required>
                 <input type="text" placeholder="Author" name="author" id="author" class="book-input input" required>
@@ -46,7 +46,7 @@
                 <input type="checkbox" name="read" id='read-check'><br>
                 <button type="text" class="submit-book" data="form-popup">Submit</button>
                 <button type="text" class="cancel" data="form-popup">Cancel</button>
-            </div>
+            </form>
         </div><br>
     </div>
     <div class="library-container"></div>
@@ -69,7 +69,7 @@
 
         db.settings({timestampsInSnapshots: true});
     </script>
-    <script type="text/javascript" src="script2.js"></script>
+    <script type="text/javascript" src="script.js"></script>
     <script type="text/javascript" src="auth.js"></script>
 </body>    
 </html>
