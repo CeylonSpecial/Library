@@ -2,31 +2,50 @@
 <html>
 <head>
     <title>Library</title>
-    <link href='stylesheet.css' rel='stylesheet'>
+    <link href='stylesheet2.css' rel='stylesheet'>
     <meta charset="UTF-8"/>
 </head>
 <body>
+    <div class="nav">
+        <button type="text" class="main-btn signin-btn" data="signin-popup">Sign In</button>
+        <button type="text" class="main-btn signup-btn" data="signup-popup">Sign Up</button>
+    </div>
+    <div class="popup-container">
+        <div class="signin-popup">
+            <form class="signin-container">
+                <h1>Sign In</h1>
+                <input type="text" placeholder="Email" name="email" class="input" required>
+                <input type="password" placeholder="Password" name="password" class="input" required>
+                <button type="submit" id="sign-in" class="submit" data="signin-popup">Sign In</button>
+                <button type="text" class="cancel" data="signin-popup">Cancel</button>
+            </form>
+        </div>
+        <div class="signup-popup">
+            <form class="signup-container" data="signup-popup">
+                <h1>Sign Up</h1>
+                <input type="text" id="email" placeholder="Email" name="email" class="input" required>
+                <input type="password" id="password" placeholder="Choose Your Password" name="password" class="input" required>
+                <button type="submit" id="sign-up" class="submit" data="signup-popup">Sign Up</button>
+                <button type="text" class="cancel" data="signup-popup">Cancel</button>
+            </form>
+        </div>
+    </div>
     <div class="header-container">
         <h1>L I B R A R Y</h1>
         <p>_____________________________</p>
-        <button class="new-bookbtn">Add New Book</button>
+        <button type="text" class="main-btn new-bookbtn" data="form-popup">Add New Book</button>
     </div>
     <div class="popup-container">
-        <div class="form-popup" id="myForm">
+        <div class="form-popup">
             <div class="form-container">
                 <h1>New Book</h1>
-        
-                <input type="text" placeholder="Title" name="title" id="title" class="input" required>
-        
-                <input type="text" placeholder="Author" name="author" id="author" class="input" required>
-
-                <input type="number" placeholder="Number of Pages" name="pages" id="pages" class="input" min="0" required><br>
-                
+                <input type="text" placeholder="Title" name="title" id="title" class="book-input input" required>
+                <input type="text" placeholder="Author" name="author" id="author" class="book-input input" required>
+                <input type="number" placeholder="Number of Pages" name="pages" id="pages" class="book-input input" min="0" required><br>
                 <label for="read">Read?</label>
                 <input type="checkbox" name="read" id='read-check'><br>
-                
-                <button type="text" class="btn">Submit</button>
-                <button type="text" class="btn cancel">Cancel</button>
+                <button type="text" class="submit-book" data="form-popup">Submit</button>
+                <button type="text" class="cancel" data="form-popup">Cancel</button>
             </div>
         </div><br>
     </div>
@@ -34,6 +53,23 @@
     <script src="https://www.gstatic.com/firebasejs/8.5.0/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.5.0/firebase-auth.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.5.0/firebase-firestore.js"></script>
-    <script type="text/javascript" src="script.js"></script>
+    <script>
+        const firebaseConfig = {
+            apiKey: "AIzaSyDRajATMmlmlzrzIiQlkbSPYMi9PsWO77c",
+            authDomain: "library-e88b2.firebaseapp.com",
+            projectId: "library-e88b2",
+            storageBucket: "library-e88b2.appspot.com",
+            messagingSenderId: "794752704538",
+            appId: "1:794752704538:web:e97d98c2e0c5a5b864f1a3"
+        };
+        firebase.initializeApp(firebaseConfig);
+
+        const auth = firebase.auth();
+        const db = firebase.firestore();
+
+        db.settings({timestampsInSnapshots: true});
+    </script>
+    <script type="text/javascript" src="script2.js"></script>
+    <script type="text/javascript" src="auth.js"></script>
 </body>    
 </html>

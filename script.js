@@ -1,13 +1,3 @@
-var firebaseConfig = {
-    apiKey: "AIzaSyAtMOqz2WlMwKbS6pBsAxC6mgHjJ4XhnTQ",
-    authDomain: "library-e88b2.firebaseapp.com",
-    projectId: "library-e88b2",
-    storageBucket: "library-e88b2.appspot.com",
-    messagingSenderId: "794752704538",
-    appId: "1:794752704538:web:e97d98c2e0c5a5b864f1a3"
-};
-firebase.initializeApp(firebaseConfig);
-
 class Book {
     constructor (title, author, pages, read) {
         this.title = title,
@@ -21,46 +11,58 @@ class Book {
 }
 
 let myLibrary = [];
-const newBook = document.querySelector('.new-bookbtn');
-const submit = document.querySelector('.btn');
-const cancel = document.querySelector('.cancel');
+const mainBtns = document.querySelectorAll('.main-btn');
+const submitBook = document.querySelector('.submit-book');
+const cancel = document.querySelectorAll('.cancel');
 
-readDB();
+window.addEventListener('load', async () => {
+    await addDBToLibrary();
+    displayBooks();
+})
 
-document.addEventListener('click', function(e) {
+document.addEventListener('click', (e) => {
     if (e.target.className === 'deletebtn' || e.target.className === 'readbtn') {
-        let index = myLibrary.findIndex(item => item.info() === e.target.getAttribute('data'));
+        let bookMatch = myLibrary.findIndex(item => item.info() === e.target.getAttribute('data'));
         if (e.target.textContent === 'Delete') {
-            deleteFromDB(myLibrary[index]);
-            myLibrary.splice(index, 1);
+            deleteFromDB(myLibrary[bookMatch]);
+            deleteFromLibrary(bookMatch);
         } else if (e.target.textContent === 'Read' || e.target.textContent === 'Unread') {
-            myLibrary[index].read = !myLibrary[index].read
-            editInDB(myLibrary[index]);
+            editReadStatusInLibrary(bookMatch);
+            editReadStatusInDB(myLibrary[bookMatch]);
         };
         displayBooks();
     };
 })
 
-newBook.addEventListener('click', openForm);
+mainBtns.forEach(button => {
+    button.addEventListener('click', (e) => {
+        openForm(e.target.getAttribute('data'));
+    });
+})
 
-submit.addEventListener('click', () => {
+submitBook.addEventListener('click', (e) => {
     let isVerified = verifyForm();
     if (isVerified) {
-        addToDB(addBookToLibrary());
+        let title = document.querySelector('#title').value;
+        let author = document.querySelector('#author').value;
+        let pages = document.querySelector('#pages').value;
+        let read = document.querySelector('#read-check').checked;
+        
+        addToDB(addBookToLibrary(title, author, pages, read));
         clearInput();
-        closeForm();
+        closeForm(e.target.getAttribute('data'));
         displayBooks();
     };
 })
 
-cancel.addEventListener('click', () => {
-    clearInput();
-    closeForm();
+cancel.forEach(button => {
+    button.addEventListener('click', (e) => {
+        clearInput();
+        closeForm(e.target.getAttribute('data'));
+    })
 })
 
 function addToDB(book) {
-
-    const db = firebase.firestore();
 
     db.collection("library").doc(`${book.info()}`).set({
         title: book.title,
@@ -77,7 +79,6 @@ function addToDB(book) {
 }
 
 function deleteFromDB(book) {
-    const db = firebase.firestore();
     
     db.collection("library").doc(`${book.info()}`).delete().then(() => {
         console.log("Document successfully deleted!");
@@ -86,34 +87,39 @@ function deleteFromDB(book) {
     });
 }
 
-function editInDB(book) {
-    const db = firebase.firestore();
+function editReadStatusInDB(book) {
 
     db.collection('library').doc(`${book.info()}`).update({
         read: book.read
     });
 }
 
-async function readDB() {
-    const db = firebase.firestore();
+async function addDBToLibrary() {
 
     const data = await db.collection("library").get();
     data.docs.forEach(doc => {
-        let book = new Book(doc.data().title, doc.data().author, doc.data().pages, doc.data().read);
-        myLibrary.push(book);
+        let title = doc.data().title;
+        let author = doc.data().author;
+        let pages = doc.data().pages;
+        let read = doc.data().read;
+
+        addBookToLibrary(title, author, pages, read);
     });
-    displayBooks();
 }
 
-function addBookToLibrary() {
-    let title = document.querySelector('#title').value;
-    let author = document.querySelector('#author').value;
-    let pages = document.querySelector('#pages').value;
-    let read = document.querySelector('#read-check').checked;
+function addBookToLibrary(title, author, pages, read) {
 
     const book = new Book(title, author, pages, read);
     myLibrary.push(book);
     return book;
+}
+
+function deleteFromLibrary(book) {
+    myLibrary.splice(book, 1);
+}
+
+function editReadStatusInLibrary(book) {
+    myLibrary[book].read = !myLibrary[book].read
 }
 
 function displayBooks() {
@@ -166,20 +172,22 @@ function createButtons(parent, book) {
     return readButton;
 }
 
-function openForm() {
-    document.querySelector('.form-popup').style.display = "block";
+function openForm(formToOpen) {
+    document.querySelector(`.${formToOpen}`).style.display = "block";
     document.querySelector('.library-container').classList.add('popup-selected');
     document.querySelector('.header-container').classList.add('popup-selected');
+    document.querySelector('.nav').classList.add('popup-selected');
 }
   
-function closeForm() {
-    document.querySelector('.form-popup').style.display = "none";
+function closeForm(formToClose) {
+    document.querySelector(`.${formToClose}`).style.display = "none";
     document.querySelector('.library-container').classList.remove('popup-selected');
     document.querySelector('.header-container').classList.remove('popup-selected');
+    document.querySelector('.nav').classList.remove('popup-selected');
 }
 
 function verifyForm() {
-    let input = [...document.querySelectorAll('.input')];
+    let input = [...document.querySelectorAll('.book-input')];
 
     input.forEach(function(entry) {
         if (!entry.validity.valid) {
