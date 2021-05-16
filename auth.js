@@ -3,19 +3,9 @@ const loginForm = document.querySelector('.signin-container');
 const loginOutBtn = document.querySelector('.signin-btn');
 const signUpBtn = document.querySelector('.signup-btn');
 
-auth.onAuthStateChanged(function(user) {
-    if (user) {
-        loginOutBtn.textContent = "Logout";
-    } else {
-        loginOutBtn.textContent = "Login";
-    }
-})
-
 loginOutBtn.addEventListener('click', (e) => {
     if (loginOutBtn.textContent === "Logout") {
-        auth.signOut().then(() => {
-            console.log('logged out');
-        });
+        auth.signOut();
     } else {
         openForm(e.target.getAttribute('data'));
     }

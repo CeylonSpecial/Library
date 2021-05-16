@@ -15,8 +15,15 @@ const newBookBtn = document.querySelector('.new-bookbtn');
 const submitBook = document.querySelector('.submit-book');
 const cancel = document.querySelectorAll('.cancel');
 
-window.addEventListener('load', async () => {
-    await addDBToLibrary();
+auth.onAuthStateChanged(async function(user) {
+    const loginOutBtn = document.querySelector('.signin-btn');
+    if (user) {
+        loginOutBtn.textContent = "Logout";
+        await addDBToLibrary();
+    } else {
+        loginOutBtn.textContent = "Login";
+        myLibrary =[];
+    }
     displayBooks();
 })
 
@@ -62,7 +69,7 @@ cancel.forEach(button => {
 
 function addToDB(book) {
 
-    db.collection("library").doc(`${book.info()}`).set({
+    db.collection(`${auth.currentUser.uid}`).doc(`${book.info()}`).set({
         title: book.title,
         author: book.author,
         pages: book.pages,
@@ -78,7 +85,7 @@ function addToDB(book) {
 
 function deleteFromDB(book) {
     
-    db.collection("library").doc(`${book.info()}`).delete().then(() => {
+    db.collection(`${auth.currentUser.uid}`).doc(`${book.info()}`).delete().then(() => {
         console.log("Document successfully deleted!");
     }).catch((error) => {
         console.error("Error removing document: ", error);
@@ -87,14 +94,14 @@ function deleteFromDB(book) {
 
 function editReadStatusInDB(book) {
 
-    db.collection('library').doc(`${book.info()}`).update({
+    db.collection(`${auth.currentUser.uid}`).doc(`${book.info()}`).update({
         read: book.read
     });
 }
 
 async function addDBToLibrary() {
 
-    const data = await db.collection("library").get();
+    const data = await db.collection(`${auth.currentUser.uid}`).get();
     data.docs.forEach(doc => {
         let title = doc.data().title;
         let author = doc.data().author;
