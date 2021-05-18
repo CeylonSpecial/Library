@@ -36,17 +36,23 @@ function userSignUp() {
     console.log(email, password);
 
     auth.createUserWithEmailAndPassword(email, password).then(cred => {
-        console.log(cred.user);
+        const userID = cred.user.uid;
+        createUserDB(userID, email);
     })
+}
+
+function createUserDB(userID, email) {
+    db.collection('users').doc(`${userID}`).set({
+        userID: userID,
+        email: email
+    });
 }
 
 function userLogin() {
     const email = loginForm['email'].value;
     const password = loginForm['password'].value;
 
-    auth.signInWithEmailAndPassword(email, password).then(cred => {
-        console.log(cred.user);
-    })
+    auth.signInWithEmailAndPassword(email, password);
 }
 
 function openForm(formToOpen) {
