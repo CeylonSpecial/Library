@@ -7,7 +7,18 @@
     padding-right: 10px;
 }
 
-.signin-btn, .signup-btn {
+.welcome-popup {
+    display: none;
+    width: 400px;
+    background-color: white;
+    z-index: 1;
+    position: absolute;
+    transform: translate(0, 80%);
+    border-radius: 2px;
+    box-shadow: 0px 0px 10px;
+}
+
+.logout-btn {
     background-color: #627055;
     border-style: none;
     color: white;
@@ -17,14 +28,18 @@
 }
 
 .signin-popup, .signup-popup {
+    margin-top: 250px;
     display: none;
     width: 400px;
     background-color: white;
     z-index: 1;
     position: absolute;
-    transform: translate(0, 100%);
     border-radius: 2px;
     box-shadow: 0px 0px 10px;
+}
+
+.signup-error, .login-error {
+    color: red;
 }
 
 .header-container h1 {
@@ -136,7 +151,8 @@ button:hover {
     box-shadow: 0px 0px 10px;
 }
 
-.form-container, .signin-container, .signup-container {
+.form-container, .signin-container, .signup-container, .welcome-container {
+    position: relative;
     width: 250px;
     text-align: center;
     margin: auto;
@@ -159,6 +175,7 @@ button:hover {
     border: none;
     margin-bottom:10px;
     border-radius: 3px;
+    width: 90px;
 }
 
 .submit-book {
@@ -177,7 +194,7 @@ input[type='checkbox'] + label {
     width: 10px;
 }
 
-.cancel {
+.cancel, .cancel-login {
     background-color: #6d0d25;
     color: white;
     padding: 16px 20px;
@@ -189,12 +206,5 @@ input[type='checkbox'] + label {
 .popup-selected {
     opacity: .5;
     pointer-events: none;
-}
-
-.invalid {
-    box-shadow: 0 0 5px red;
-    padding: 3px 0px 3px 3px;
-    margin: 5px 1px 3px 0px;
-    border: 1px solid red;
 }
 

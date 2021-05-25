@@ -7,8 +7,20 @@
 </head>
 <body>
     <div class="nav">
-        <button type="text" class="login signin-btn" data="signin-popup">Login</button>
-        <button type="text" class="login signup-btn" data="signup-popup">Sign Up</button>
+        <button type="text" class="logout-btn" data="signup-popup">Logout</button>
+    </div>
+    <div class="popup-container">
+        <div class="welcome-popup">
+            <div class="welcome-container">
+                <h1>Welcome to the Library App!</h1>
+                <p>
+                    Please login to access your personal library. If you do not already have an account, 
+                    sign up to begin creating your library and accessing it from anywhere!
+                </p>
+                <button type="submit" id="open-login" class="submit" data="signin-popup">Login</button>
+                <button type="submit" id="open-sign-up" class="submit" data="signup-popup">Sign Up</button>
+            </div>
+        </div>
     </div>
     <div class="popup-container">
         <div class="signin-popup">
@@ -16,8 +28,9 @@
                 <h1>Login</h1>
                 <input type="text" placeholder="Email" name="email" class="input" required>
                 <input type="password" placeholder="Password" name="password" class="input" required>
+                <div class='login-error'></div>
                 <button type="submit" id="login" class="submit" data="signin-popup">Login</button>
-                <button type="text" class="cancel" data="signin-popup">Cancel</button>
+                <button type="button" class="cancel-login" data="signin-popup">Cancel</button>
             </form>
         </div>
         <div class="signup-popup">
@@ -25,8 +38,9 @@
                 <h1>Sign Up</h1>
                 <input type="text" id="email" placeholder="Email" name="email" class="input" required>
                 <input type="password" id="password" placeholder="Choose Your Password" name="password" class="input" required>
+                <div class='signup-error'></div>
                 <button type="submit" id="sign-up" class="submit" data="signup-popup">Sign Up</button>
-                <button type="text" class="cancel" data="signup-popup">Cancel</button>
+                <button type="button" class="cancel-login" data="signup-popup">Cancel</button>
             </form>
         </div>
     </div>

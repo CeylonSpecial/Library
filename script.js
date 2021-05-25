@@ -15,18 +15,21 @@ const newBookBtn = document.querySelector('.new-bookbtn');
 const submitBook = document.querySelector('.submit-book');
 const cancel = document.querySelectorAll('.cancel');
 
+
+//check if there is a user logged in//
 auth.onAuthStateChanged(async function(user) {
-    const loginOutBtn = document.querySelector('.signin-btn');
+    const logoutBtn = document.querySelector('.logout-btn');
     if (user) {
-        loginOutBtn.textContent = "Logout";
+        logoutBtn.style.visibility = 'visible';
         await addDBToLibrary();
     } else {
-        loginOutBtn.textContent = "Login";
-        myLibrary =[];
+        myLibrary = [];
+        logoutBtn.style.visibility = 'hidden';
     }
     displayBooks();
 })
 
+//listen for book deletion or change in read status//
 document.addEventListener('click', (e) => {
     if (e.target.className === 'deletebtn' || e.target.className === 'readbtn') {
         let bookMatch = myLibrary.findIndex(item => item.info() === e.target.getAttribute('data'));
@@ -68,23 +71,19 @@ cancel.forEach(button => {
 })
 
 function addToDB(book) {
-
     db.collection('users').doc(`${auth.currentUser.uid}`).collection('library').doc(`${book.info()}`).set({
         title: book.title,
         author: book.author,
         pages: book.pages,
         read: book.read
-    })
-    .then(() => {
+    }) .then(() => {
         console.log("Document successfully written!");
-    })
-    .catch((error) => {
+    }) .catch((error) => {
         console.error("Error adding document: ", error);
     });
 }
 
 function deleteFromDB(book) {
-    
     db.collection('users').doc(`${auth.currentUser.uid}`).collection('library').doc(`${book.info()}`).delete().then(() => {
         console.log("Document successfully deleted!");
     }).catch((error) => {
@@ -93,14 +92,13 @@ function deleteFromDB(book) {
 }
 
 function editReadStatusInDB(book) {
-
     db.collection('users').doc(`${auth.currentUser.uid}`).collection('library').doc(`${book.info()}`).update({
         read: book.read
     });
 }
 
+//read database on startup and add any stored books to library array//
 async function addDBToLibrary() {
-
     const data = await db.collection('users').doc(`${auth.currentUser.uid}`).collection('library').get();
     data.docs.forEach(doc => {
         let title = doc.data().title;
@@ -113,7 +111,6 @@ async function addDBToLibrary() {
 }
 
 function addBookToLibrary(title, author, pages, read) {
-
     const book = new Book(title, author, pages, read);
     myLibrary.push(book);
     return book;
@@ -132,8 +129,8 @@ function displayBooks() {
     removeAllChildNodes(library);
     
     myLibrary.forEach(book => {
-        const [container, bookInfo] = createDivs(library);
-        let readButton = createButtons(container, book);
+        const [container, bookInfo] = createBookDivs(library);
+        let readButton = createBookButtons(container, book);
 
         bookInfo.textContent = book.info();
         if (book.read) {
@@ -144,7 +141,7 @@ function displayBooks() {
     });
 }
 
-function createDivs(parent) {
+function createBookDivs(parent) {
     const newBook = document.createElement('div');
     const bookInfo = document.createElement('div');
     const container = document.createElement('div');
@@ -159,7 +156,7 @@ function createDivs(parent) {
     return [container, bookInfo];
 }
 
-function createButtons(parent, book) {
+function createBookButtons(parent, book) {
     const buttons = document.createElement('div');
     const deleteButton = document.createElement('button');
     let readButton = document.createElement('button');
@@ -177,15 +174,15 @@ function createButtons(parent, book) {
     return readButton;
 }
 
-function openForm(formToOpen) {
-    document.querySelector(`.${formToOpen}`).style.display = "block";
+function openForm(form) {
+    document.querySelector(`.${form}`).style.display = "block";
     document.querySelector('.library-container').classList.add('popup-selected');
     document.querySelector('.header-container').classList.add('popup-selected');
     document.querySelector('.nav').classList.add('popup-selected');
 }
   
-function closeForm(formToClose) {
-    document.querySelector(`.${formToClose}`).style.display = "none";
+function closeForm(form) {
+    document.querySelector(`.${form}`).style.display = "none";
     document.querySelector('.library-container').classList.remove('popup-selected');
     document.querySelector('.header-container').classList.remove('popup-selected');
     document.querySelector('.nav').classList.remove('popup-selected');
@@ -193,12 +190,7 @@ function closeForm(formToClose) {
 
 function verifyForm() {
     let input = [...document.querySelectorAll('.book-input')];
-
-    input.forEach(function(entry) {
-        if (!entry.validity.valid) {
-            entry.classList.add('invalid');
-        };
-    });
+    
     return input.every(entry => entry.validity.valid);
 }
 
