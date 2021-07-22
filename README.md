@@ -1,5 +1,8 @@
 About:
-This was my first project in the Full Stack JavaScript learning path and my sixth project overall of The Odin Project's coursework. The assignment was to create a library web app where a user could add and store book information (title, author, number of pages, read/unread). The stored books and info would be displayed on the app.
+This was my first project in the Full Stack JavaScript learning path and my sixth project overall of The Odin Project's coursework.
+
+Assignment:
+Create a library web app where a user can add and store book information (title, author, number of pages, read/unread). The stored books and info should be displayed on the app.
 
 Objectives:
 -create a Book object constructor to call everytime the user added a new book
