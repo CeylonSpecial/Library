@@ -3,10 +3,10 @@ class Book {
         this.title = title,
         this.author = author,
         this.pages = pages,
-        this.read = read,
-        this.info = function() {
-            return `${this.title}` + "\r\n\r\n" + `${this.author}` + "\r\n\r\n" + `${this.pages}` + " pages"
-        }
+        this.read = read
+    }
+    info = () => {
+        return `${this.title}` + "\r\n\r\n" + `${this.author}` + "\r\n\r\n" + `${this.pages}` + " pages";
     }
 }
 
